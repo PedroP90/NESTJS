@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateLibroDto } from './dto/create-libro.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Libro } from './entities/libro.entity';
@@ -18,19 +18,24 @@ export class LibrosService {
     //     return ('Listado de Libros desde el servicio')
     // }
 
-    create (createLibroDto: CreateLibroDto){
+    async create (createLibroDto: CreateLibroDto){
 
-        // el objeto json que nos llega se transforma en un objeto javascript
-        const libro = this.libroRepository.create(createLibroDto);
-        //.save se encarga de transformar el objeto javascript en un registro en la base de datos
-        // y realiza un insert into
-        this.libroRepository.save(libro);
-
-        // Insertar en la BD 
-        return {
-            data: createLibroDto,
-            msg: 'Libro creado correctamente',
-            status: 200
+        try{
+            // el objeto json que nos llega se transforma en un objeto javascript
+            const libro = this.libroRepository.create(createLibroDto);
+            //.save se encarga de transformar el objeto javascript en un registro en la base de datos
+            // y realiza un insert into
+            await this.libroRepository.save(libro);
+ 
+            // Insertar en la BD 
+            return {
+             data: createLibroDto,
+             msg: 'Libro creado correctamente',
+             status: 200
+            }
+        }catch(error){
+            throw new InternalServerErrorException("Pida ayuda a Fran o cuélguese de una farola")
         }
+        
     }
 }
