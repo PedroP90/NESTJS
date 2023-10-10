@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 //Para la creación de la tabla y sus columnas
 
 @Entity('Libros')
 export class Libro {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    // @PrimaryGeneratedColumn('increment')
+    // id: number;
 
     
     @PrimaryColumn()
@@ -24,4 +24,12 @@ export class Libro {
         default: 0
     })
     precio: number
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    updateNombre(){
+        this.nombre = this.nombre
+                        .toUpperCase()
+                        .replaceAll(" ","_")
+    }
 }

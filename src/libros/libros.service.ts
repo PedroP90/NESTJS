@@ -18,8 +18,19 @@ export class LibrosService {
     //     return ('Listado de Libros desde el servicio')
     // }
 
+    async findALL(){
+        let libros = await this.libroRepository.find();
+        return {
+            data: libros,
+            msg: 'Listado de libros',
+            status: 200
+        }
+    }
+
     async create (createLibroDto: CreateLibroDto){
 
+        //createLibroDto es ok
+        //insertar en la BD
         try{
             // el objeto json que nos llega se transforma en un objeto javascript
             const libro = this.libroRepository.create(createLibroDto);
@@ -34,6 +45,7 @@ export class LibrosService {
              status: 200
             }
         }catch(error){
+            console.log(error);
             throw new InternalServerErrorException("Pida ayuda a Fran o cuélguese de una farola")
         }
         

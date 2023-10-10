@@ -15,14 +15,14 @@ export class LibrosController {
         return ('Seccion de Libros')
     }
 
-    // @Get('Listar')
-    // getAll(){
-    //     return this.librosService.getAll();
-    // }
+    @Get('Listar')
+    getAll(){
+        return this.librosService.findALL();
+    }
 
     @Post()
     create(@Body() createLibroDto: CreateLibroDto){
-        
+        //devuelve el return si el dto valida el objeto
         return this.librosService.create(createLibroDto)
         
     }
