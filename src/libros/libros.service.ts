@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateLibroDto } from './dto/create-libro.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Libro } from './entities/libro.entity';
@@ -17,6 +17,21 @@ export class LibrosService {
     // getAll(){
     //     return ('Listado de Libros desde el servicio')
     // }
+
+    async getISBN(isbn: string){
+        //petición al ORM
+        const libro = await this.libroRepository.findOneBy({isbn});
+        //ORM --> SGBD
+        if(!libro){
+            throw new NotFoundException(`Libro con isbn ${isbn} no encontrado`);
+        }else{
+        return {
+            data: libro,
+            msg: `Detalle del libro ${isbn}`,
+            status: 200
+        };
+    }
+    }
 
     async findALL(){
         let libros = await this.libroRepository.find();
