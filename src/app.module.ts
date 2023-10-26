@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     LibrosModule, AutoresModule, EditorialesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: "192.168.8.56",
+      host: "192.168.1.24",
       port: 5432,
       database: "Libreria",
       username: "postgres",

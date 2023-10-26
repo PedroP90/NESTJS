@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { LibrosService } from './libros.service';
 import { CreateLibroDto } from './dto/create-libro.dto';
+import { PaginationDTO } from 'src/common/dtos/pagination.dto';
 
 @Controller('libros')
 export class LibrosController {
@@ -10,15 +11,22 @@ export class LibrosController {
         this.librosService
     }
 
-    @Get('/')
-    getHome(){
-        return ('Seccion de Libros')
+    // @Get('/')
+    // getHome(){
+    //     return ('Seccion de Libros')
+    // }
+
+    // @Get('Listar')
+    // getAll(){
+    //     return this.librosService.findALL();
+    // }
+
+    @Get()									
+    findAll( @Query() paginationDto: PaginationDTO) {
+        console.log(paginationDto);
+        return this.librosService.findAll(paginationDto);
     }
 
-    @Get('Listar')
-    getAll(){
-        return this.librosService.findALL();
-    }
 
     @Get(':id')
     getISBN(@Param('id') isbn: string){
@@ -41,5 +49,10 @@ export class LibrosController {
         //devuelve el return si el dto valida el objeto
         return this.librosService.create(createLibroDto)
         
+    }
+
+    @Delete(':id')
+    remove(@Param('id') isbn: string) {
+        return this.librosService.remove(isbn)
     }
 }

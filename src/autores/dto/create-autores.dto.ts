@@ -1,8 +1,9 @@
-import { IsInt, IsString, MaxLength, MinLength } from "class-validator";
+import { IsInt, IsString, MaxLength, MinLength, isString } from "class-validator";
 
 export class CreateAutorDto{
    
-  
+    @IsString()
+    dni: string
 
     @IsString()
     @MinLength(5)

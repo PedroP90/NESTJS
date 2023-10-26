@@ -3,6 +3,7 @@ import { CreateLibroDto } from './dto/create-libro.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Libro } from './entities/libro.entity';
 import { Repository } from 'typeorm';
+import { PaginationDTO } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class LibrosService {
@@ -33,14 +34,23 @@ export class LibrosService {
     }
     }
 
-    async findALL(){
-        let libros = await this.libroRepository.find();
-        return {
-            data: libros,
-            msg: 'Listado de libros',
-            status: 200
+    findAll( paginationDto: PaginationDTO ) {			
+        const { limit , offset } = paginationDto;
+        //busca desde el ‘offset’ y extrae ‘limit’ objetos
+        return this.libroRepository.find({
+            take: limit,
+            skip: offset
+          });
         }
-    }
+        
+    // async findALL(){
+    //     let libros = await this.libroRepository.find();
+    //     return {
+    //         data: libros,
+    //         msg: 'Listado de libros',
+    //         status: 200
+    //     }
+    // }
 
     async create (createLibroDto: CreateLibroDto){
 
@@ -65,4 +75,17 @@ export class LibrosService {
         }
         
     }
+
+    async remove(isbn: string) {					
+        const libro = await this.libroRepository.findOneBy({isbn});
+        if(!libro){
+            throw new NotFoundException(`Libro con isbn ${isbn} no encontrado`);
+        }else{
+            return await this.libroRepository.remove(libro);
+        }
+    }
+
+    
+       
+     
 }

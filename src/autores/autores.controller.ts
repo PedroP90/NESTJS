@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { AutoresService } from './autores.service';
 import { CreateAutorDto } from './dto/create-autores.dto';
+import { PaginationDTO } from 'src/common/dtos/pagination.dto';
 
 @Controller('autores')
 export class AutoresController {
@@ -10,9 +11,16 @@ export class AutoresController {
     }
 
     //.../autores  es la home de autores
-    @Get('/')
-    getHome(){
-        return ('Seccion de Autores')
+    // Si no comento esta parte luego no puedo paginar con offset y limit
+    // @Get('/')
+    // getHome(){
+    //     return ('Seccion de Autores')
+    // }
+
+    @Get()									
+    findAll( @Query() paginationDto: PaginationDTO) {
+        console.log(paginationDto);
+        return this.autoresService.findAll(paginationDto);
     }
 
     // listar todos o un subconjunto/filtro
@@ -45,14 +53,9 @@ export class AutoresController {
     }
 
     @Post()
-    create(@Body() createLibroDto: CreateAutorDto){
-        console.log(createLibroDto)
-        
-        return {
-            data: createLibroDto,
-            msg: 'Autor creado correctamente',
-            status: 200
-        }
+    create(@Body() CreateAutorDto: CreateAutorDto){
+        console.log(CreateAutorDto)
+        return this.autoresService.create(CreateAutorDto)
     }
 
 }
